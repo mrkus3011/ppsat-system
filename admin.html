@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Staff - PPSAT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a237e, #283593);
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .logo-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-small {
+            width: 60px;
+            height: 60px;
+            background: white;
+            color: #1a237e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            font-family: 'Arial Black', sans-serif;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-small img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .header-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .database-btn {
+            background: #9C27B0 !important;
+        }
+
+        .database-btn:hover {
+            background: #7B1FA2 !important;
+        }
+
+        /* Main Content Grid */
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* Staff Sections */
+        .staff-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .staff-title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .staff-subtitle {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+        }
+
+        .staff-list-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .staff-list {
+            list-style: none;
+        }
+
+        .staff-item {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .staff-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(3px);
+        }
+
+        .staff-item.active {
+            background: rgba(76, 175, 80, 0.25);
+            border-left: 3px solid #4CAF50;
+        }
+
+        .staff-info {
+            flex: 1;
+            text-align: left;
+        }
+
+        .staff-name {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 3px;
+        }
+
+        .staff-position {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .staff-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .action-icon {
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-icon:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .add-staff-btn {
+            padding: 12px 25px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .add-staff-btn:hover {
+            background: #388E3C;
+            transform: translateY(-2px);
+        }
+
+        .home-btn-section {
+            margin-top: 20px;
+        }
+
+        .home-btn {
+            padding: 12px 30px;
+            background: white;
+            color: #1a237e;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .home-btn:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+        }
+
+        /* Personal Information Section */
+        .personnel-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .personnel-content {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        .photo-section {
+            flex: 0 0 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .photo-container {
+            width: 180px;
+            height: 220px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .upload-instruction {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .photo-actions {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .photo-btn {
+            flex: 1;
+            padding: 8px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .photo-btn:hover {
+            background: #1976d2;
+        }
+
+        .remove-photo {
+            background: #f44336;
+        }
+
+        .remove-photo:hover {
+            background: #d32f2f;
+        }
+
+        .info-section {
+            flex: 1;
+        }
+
+        .personnel-details {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .detail-item {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            min-width: 100px;
+            font-size: 16px;
+        }
+
+        .detail-value {
+            flex: 1;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        .documents-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .documents-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .documents-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .doc-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            text-align: center;
+        }
+
+        .doc-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .doc-card.has-file {
+            background: rgba(76, 175, 80, 0.15);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .doc-icon {
+            font-size: 32px;
+            color: #64b5f6;
+            margin-bottom: 10px;
+        }
+
+        .doc-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .doc-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .doc-action-btn {
+            flex: 1;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .doc-action-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .upload-btn {
+            background: #2196F3;
+        }
+
+        .upload-btn:hover {
+            background: #1976d2;
+        }
+
+        .download-btn {
+            background: #4CAF50;
+        }
+
+        .download-btn:hover {
+            background: #388E3C;
+        }
+
+        /* Bottom Home Button */
+        .bottom-home {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            max-height: 90vh;
+            overflow-y: auto;
+            color: #333;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            color: #1a237e;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-modal {
+            font-size: 28px;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            color: #333;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #2196F3;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .submit-btn:hover {
+            background: #388E3C;
+        }
+
+        .cancel-btn {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .cancel-btn:hover {
+            background: #e0e0e0;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+            font-weight: 600;
+            animation: slideInRight 0.3s ease;
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        .toast.error {
+            background: #f44336;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .personnel-content {
+                flex-direction: column;
+            }
+            
+            .photo-section {
+                width: 100%;
+                align-items: center;
+            }
+            
+            .documents-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="logo-title">
+                <div class="logo-small" id="logoContainer" onclick="document.getElementById('logoInput').click()">
+                    <img id="smallLogo" alt="PPSAT Logo">
+                    <div id="smallLogoText">PPSAT</div>
+                </div>
+                <div class="header-title">Admin Staff</div>
+            </div>
+            
+            <div class="header-nav">
+                <button class="nav-btn" onclick="goToHome()">
+                    <i class="fas fa-home"></i> HOME
+                </button>
+                <button class="nav-btn database-btn" onclick="goToDatabase()">
+                    <i class="fas fa-database"></i> DATABASE
+                </button>
+            </div>
+            
+            <input type="file" id="logoInput" accept="image/*" style="display: none;">
+        </header>
+
+        <!-- Main Content Grid -->
+        <div class="admin-grid">
+            <!-- Regular Staff Section -->
+            <div class="staff-section">
+                <div class="staff-title">Regular</div>
+                <div class="staff-subtitle">Staff</div>
+                
+                <div class="staff-list-container">
+                    <ul class="staff-list" id="regularStaffList">
+                        <!-- Regular staff will be listed here -->
+                    </ul>
+                </div>
+                
+                <button class="add-staff-btn" onclick="openAddModal('Regular')">
+                    <i class="fas fa-plus-circle"></i> Add Regular Staff
+                </button>
+                
+                <div class="home-btn-section">
+                    <button class="home-btn" onclick="goToHome()">
+                        <i class="fas fa-home"></i> HOME
+                    </button>
+                </div>
+            </div>
+
+            <!-- Job Order Staff Section -->
+            <div class="staff-section">
+                <div class="staff-title">Job Order</div>
+                <div class="staff-subtitle">Staff</div>
+                
+                <div class="staff-list-container">
+                    <ul class="staff-list" id="jobOrderStaffList">
+                        <!-- Job Order staff will be listed here -->
+                    </ul>
+                </div>
+                
+                <button class="add-staff-btn" onclick="openAddModal('Job Order')">
+                    <i class="fas fa-plus-circle"></i> Add Job Order Staff
+                </button>
+                
+                <div class="home-btn-section">
+                    <button class="home-btn" onclick="goToHome()">
+                        <i class="fas fa-home"></i> HOME
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Personal Information Section -->
+        <div class="personnel-section">
+            <div class="section-title">Personal Information</div>
+            
+            <div class="personnel-content">
+                <div class="photo-section">
+                    <div class="photo-container" id="photoPreview" onclick="document.getElementById('photoUpload').click()">
+                        <img id="profileImage" src="" alt="Profile Photo">
+                        <div class="upload-instruction">
+                            <i class="fas fa-camera" style="font-size: 32px; margin-bottom: 10px;"></i><br>
+                            Click to upload photo
+                        </div>
+                    </div>
+                    <input type="file" id="photoUpload" accept="image/*" style="display: none;">
+                    <div class="photo-actions">
+                        <button class="photo-btn" onclick="document.getElementById('photoUpload').click()">
+                            <i class="fas fa-upload"></i> Upload
+                        </button>
+                        <button class="photo-btn remove-photo" onclick="removePhoto()">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="info-section">
+                    <div class="personnel-details">
+                        <div class="detail-item">
+                            <div class="detail-label"><i class="fas fa-user"></i> Name:</div>
+                            <div class="detail-value" id="displayName">Select a staff member</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label"><i class="fas fa-briefcase"></i> Position:</div>
+                            <div class="detail-value" id="displayPosition">-</div>
+                        </div>
+                    </div>
+                    
+                    <div class="documents-section">
+                        <div class="documents-title">
+                            <i class="fas fa-file-alt"></i> Documents
+                        </div>
+                        <div class="documents-grid">
+                            <!-- PDS Card -->
+                            <div class="doc-card" id="pdsCard" onclick="manageDocument('PDS')">
+                                <div class="doc-icon"><i class="fas fa-file-contract"></i></div>
+                                <div class="doc-title">PDS</div>
+                                <div class="doc-actions">
+                                    <button class="doc-action-btn upload-btn" onclick="event.stopPropagation(); uploadDocument('PDS')">
+                                        <i class="fas fa-upload"></i> Upload
+                                    </button>
+                                    <button class="doc-action-btn download-btn" onclick="event.stopPropagation(); downloadDocument('PDS')">
+                                        <i class="fas fa-download"></i> Download
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Training Certificates Card -->
+                            <div class="doc-card" id="trainingCard" onclick="manageDocument('Training Certificates')">
+                                <div class="doc-icon"><i class="fas fa-certificate"></i></div>
+                                <div class="doc-title">Training Certificates</div>
+                                <div class="doc-actions">
+                                    <button class="doc-action-btn upload-btn" onclick="event.stopPropagation(); uploadDocument('Training Certificates')">
+                                        <i class="fas fa-upload"></i> Upload
+                                    </button>
+                                    <button class="doc-action-btn download-btn" onclick="event.stopPropagation(); downloadDocument('Training Certificates')">
+                                        <i class="fas fa-download"></i> Download
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Other Documents Card -->
+                            <div class="doc-card" id="otherCard" onclick="manageDocument('Other')">
+                                <div class="doc-icon"><i class="fas fa-folder"></i></div>
+                                <div class="doc-title">Other</div>
+                                <div class="doc-actions">
+                                    <button class="doc-action-btn upload-btn" onclick="event.stopPropagation(); uploadDocument('Other')">
+                                        <i class="fas fa-upload"></i> Upload
+                                    </button>
+                                    <button class="doc-action-btn download-btn" onclick="event.stopPropagation(); downloadDocument('Other')">
+                                        <i class="fas fa-download"></i> Download
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bottom-home">
+                <button class="home-btn" onclick="goToHome()">
+                    <i class="fas fa-home"></i> HOME
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Staff Modal -->
+    <div id="addStaffModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">
+                    <i class="fas fa-user-plus"></i> Add New Staff
+                </div>
+                <span class="close-modal" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="staffForm" onsubmit="event.preventDefault(); saveStaff();">
+                    <div class="form-group">
+                        <label for="staffName" class="form-label">
+                            <i class="fas fa-user"></i> Full Name
+                        </label>
+                        <input type="text" id="staffName" class="form-control" placeholder="Enter full name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="staffPosition" class="form-label">
+                            <i class="fas fa-briefcase"></i> Position
+                        </label>
+                        <input type="text" id="staffPosition" class="form-control" placeholder="Enter position" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="staffType" class="form-label">
+                            <i class="fas fa-user-tag"></i> Staff Type
+                        </label>
+                        <select id="staffType" class="form-select" required>
+                            <option value="">Select Type</option>
+                            <option value="Regular">Regular</option>
+                            <option value="Job Order">Job Order</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="modal-btn submit-btn">
+                            <i class="fas fa-save"></i> Save Staff
+                        </button>
+                        <button type="button" class="modal-btn cancel-btn" onclick="closeModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Document Upload Modal -->
+    <div id="docModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-file-upload"></i> Upload Document
+                </div>
+                <span class="close-modal" onclick="closeDocModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="filePreview" style="text-align: center; padding: 20px;">
+                    <i class="fas fa-file-alt" style="font-size: 48px; color: #666; margin-bottom: 15px;"></i>
+                    <div id="fileInfo">
+                        <div style="font-weight: 600; color: #333;">No file selected</div>
+                        <div style="font-size: 14px; color: #666;">Select a file to upload</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="docFileUpload" class="form-label">
+                        <i class="fas fa-folder-open"></i> Select File
+                    </label>
+                    <input type="file" id="docFileUpload" class="form-control" 
+                           accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png,.txt">
+                </div>
+                
+                <div class="form-actions">
+                    <button class="modal-btn submit-btn" onclick="uploadSelectedDocument()" id="uploadBtn">
+                        <i class="fas fa-upload"></i> Upload File
+                    </button>
+                    <button class="modal-btn cancel-btn" onclick="closeDocModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Database for staff records
+        let staffDatabase = JSON.parse(localStorage.getItem('staffDatabase')) || {
+            regular: [
+                {
+                    id: 1,
+                    name: 'Juan Di Dela Cruz',
+                    position: 'Assistant Professor VI',
+                    photo: '',
+                    documents: {
+                        PDS: { content: '', fileName: '', fileType: '' },
+                        'Training Certificates': { content: '', fileName: '', fileType: '' },
+                        'Other': { content: '', fileName: '', fileType: '' }
+                    }
+                }
+            ],
+            joborder: [
+                {
+                    id: 1,
+                    name: 'Maria Santos',
+                    position: 'Administrative Assistant',
+                    photo: '',
+                    documents: {
+                        PDS: { content: '', fileName: '', fileType: '' },
+                        'Training Certificates': { content: '', fileName: '', fileType: '' },
+                        'Other': { content: '', fileName: '', fileType: '' }
+                    }
+                }
+            ]
+        };
+
+        let currentStaff = null;
+        let currentDocumentType = null;
+        let currentFile = null;
+
+        // Initialize the page
+        function initPage() {
+            loadStaffLists();
+            loadSavedLogo();
+            setupEventListeners();
+            
+            // Auto-select first staff if available
+            if (staffDatabase.regular.length > 0) {
+                selectStaff('regular', 0);
+            } else if (staffDatabase.joborder.length > 0) {
+                selectStaff('joborder', 0);
+            }
+            
+            // Debug: Check if database is loading
+            console.log('Database loaded:', staffDatabase);
+        }
+
+        function loadSavedLogo() {
+            const savedLogo = localStorage.getItem('ppsatLogo');
+            if (savedLogo) {
+                const smallLogo = document.getElementById('smallLogo');
+                const smallLogoText = document.getElementById('smallLogoText');
+                
+                smallLogo.src = savedLogo;
+                smallLogo.style.display = 'block';
+                smallLogoText.style.display = 'none';
+            }
+        }
+
+        function setupEventListeners() {
+            // Logo upload
+            document.getElementById('logoInput').addEventListener('change', function(e) {
+                handleLogoUpload(e);
+            });
+
+            // Photo upload
+            document.getElementById('photoUpload').addEventListener('change', function(e) {
+                uploadStaffPhoto(e);
+            });
+
+            // Document upload
+            document.getElementById('docFileUpload').addEventListener('change', function(e) {
+                previewSelectedFile(e);
+            });
+            
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                    closeDocModal();
+                }
+            });
+        }
+
+        function handleLogoUpload(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const smallLogo = document.getElementById('smallLogo');
+                    const smallLogoText = document.getElementById('smallLogoText');
+                    
+                    smallLogo.src = e.target.result;
+                    smallLogo.style.display = 'block';
+                    smallLogoText.style.display = 'none';
+                    
+                    localStorage.setItem('ppsatLogo', e.target.result);
+                    showToast('Logo updated successfully!');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function loadStaffLists() {
+            // Load regular staff
+            const regularList = document.getElementById('regularStaffList');
+            regularList.innerHTML = '';
+            
+            if (staffDatabase.regular.length === 0) {
+                regularList.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.6);">
+                        <i class="fas fa-users" style="font-size: 24px; margin-bottom: 10px;"></i>
+                        <div>No regular staff added yet</div>
+                    </div>
+                `;
+            } else {
+                staffDatabase.regular.forEach((staff, index) => {
+                    const li = document.createElement('li');
+                    li.className = 'staff-item';
+                    li.dataset.type = 'regular';
+                    li.dataset.index = index;
+                    li.innerHTML = `
+                        <div class="staff-info">
+                            <div class="staff-name">${staff.name}</div>
+                            <div class="staff-position">${staff.position}</div>
+                        </div>
+                        <div class="staff-actions">
+                            <div class="action-icon" onclick="event.stopPropagation(); editStaff('regular', ${index})">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <div class="action-icon" onclick="event.stopPropagation(); deleteStaff('regular', ${index})">
+                                <i class="fas fa-trash"></i>
+                            </div>
+                        </div>
+                    `;
+                    li.addEventListener('click', () => selectStaff('regular', index));
+                    regularList.appendChild(li);
+                });
+            }
+
+            // Load job order staff
+            const jobOrderList = document.getElementById('jobOrderStaffList');
+            jobOrderList.innerHTML = '';
+            
+            if (staffDatabase.joborder.length === 0) {
+                jobOrderList.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.6);">
+                        <i class="fas fa-briefcase" style="font-size: 24px; margin-bottom: 10px;"></i>
+                        <div>No job order staff added yet</div>
+                    </div>
+                `;
+            } else {
+                staffDatabase.joborder.forEach((staff, index) => {
+                    const li = document.createElement('li');
+                    li.className = 'staff-item';
+                    li.dataset.type = 'joborder';
+                    li.dataset.index = index;
+                    li.innerHTML = `
+                        <div class="staff-info">
+                            <div class="staff-name">${staff.name}</div>
+                            <div class="staff-position">${staff.position}</div>
+                        </div>
+                        <div class="staff-actions">
+                            <div class="action-icon" onclick="event.stopPropagation(); editStaff('joborder', ${index})">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <div class="action-icon" onclick="event.stopPropagation(); deleteStaff('joborder', ${index})">
+                                <i class="fas fa-trash"></i>
+                            </div>
+                        </div>
+                    `;
+                    li.addEventListener('click', () => selectStaff('joborder', index));
+                    jobOrderList.appendChild(li);
+                });
+            }
+        }
+
+        function selectStaff(type, index) {
+            // Remove active class from all items
+            document.querySelectorAll('.staff-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Add active class to selected item
+            const selectedItem = document.querySelector(`.staff-item[data-type="${type}"][data-index="${index}"]`);
+            if (selectedItem) {
+                selectedItem.classList.add('active');
+            }
+            
+            // Get staff data
+            const staff = staffDatabase[type][index];
+            currentStaff = { type, index, ...staff };
+            
+            // Update display
+            document.getElementById('displayName').textContent = staff.name;
+            document.getElementById('displayPosition').textContent = staff.position;
+            
+            // Update photo
+            updatePhotoDisplay(staff.photo);
+            
+            // Update document status
+            updateDocumentStatus(staff.documents);
+        }
+
+        function updatePhotoDisplay(photo) {
+            const profileImage = document.getElementById('profileImage');
+            const photoPreview = document.getElementById('photoPreview');
+            
+            if (photo) {
+                profileImage.src = photo;
+                profileImage.style.display = 'block';
+                photoPreview.querySelector('.upload-instruction').style.display = 'none';
+            } else {
+                profileImage.style.display = 'none';
+                photoPreview.querySelector('.upload-instruction').style.display = 'flex';
+            }
+        }
+
+        function updateDocumentStatus(documents) {
+            const docTypes = ['PDS', 'Training Certificates', 'Other'];
+            docTypes.forEach(docType => {
+                const card = document.getElementById(`${docType.toLowerCase().replace(' ', '')}Card`);
+                
+                if (documents[docType] && documents[docType].content) {
+                    card.classList.add('has-file');
+                } else {
+                    card.classList.remove('has-file');
+                }
+            });
+        }
+
+        function openAddModal(type) {
+            document.getElementById('modalTitle').innerHTML = `<i class="fas fa-user-plus"></i> Add ${type} Staff`;
+            document.getElementById('staffType').value = type;
+            document.getElementById('staffForm').reset();
+            delete document.getElementById('staffForm').dataset.editType;
+            delete document.getElementById('staffForm').dataset.editIndex;
+            
+            document.getElementById('addStaffModal').style.display = 'flex';
+        }
+
+        function editStaff(type, index) {
+            const staff = staffDatabase[type][index];
+            
+            document.getElementById('modalTitle').innerHTML = `<i class="fas fa-edit"></i> Edit Staff`;
+            document.getElementById('staffName').value = staff.name;
+            document.getElementById('staffPosition').value = staff.position;
+            document.getElementById('staffType').value = type === 'regular' ? 'Regular' : 'Job Order';
+            
+            document.getElementById('staffForm').dataset.editType = type;
+            document.getElementById('staffForm').dataset.editIndex = index;
+            
+            document.getElementById('addStaffModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('addStaffModal').style.display = 'none';
+        }
+
+        function saveStaff() {
+            const name = document.getElementById('staffName').value.trim();
+            const position = document.getElementById('staffPosition').value.trim();
+            const type = document.getElementById('staffType').value;
+            
+            // Validate inputs
+            if (!name || !position || !type) {
+                showToast('Please fill all required fields!', 'error');
+                return;
+            }
+            
+            const editType = document.getElementById('staffForm').dataset.editType;
+            const editIndex = document.getElementById('staffForm').dataset.editIndex;
+            
+            if (editType !== undefined && editIndex !== undefined) {
+                // Edit existing staff
+                staffDatabase[editType][editIndex].name = name;
+                staffDatabase[editType][editIndex].position = position;
+                showToast('Staff updated successfully!');
+            } else {
+                // Add new staff
+                const newStaff = {
+                    id: type === 'Regular' ? staffDatabase.regular.length + 1 : staffDatabase.joborder.length + 1,
+                    name: name,
+                    position: position,
+                    photo: '',
+                    documents: {
+                        PDS: { content: '', fileName: '', fileType: '' },
+                        'Training Certificates': { content: '', fileName: '', fileType: '' },
+                        'Other': { content: '', fileName: '', fileType: '' }
+                    }
+                };
+                
+                if (type === 'Regular') {
+                    staffDatabase.regular.push(newStaff);
+                } else {
+                    staffDatabase.joborder.push(newStaff);
+                }
+                showToast(`${type} staff added successfully!`);
+            }
+            
+            // Save to database
+            saveDatabase();
+            loadStaffLists();
+            closeModal();
+            
+            // Auto-select the new/edited staff
+            if (editType !== undefined && editIndex !== undefined) {
+                selectStaff(editType, editIndex);
+            } else {
+                const staffType = type === 'Regular' ? 'regular' : 'joborder';
+                const staffIndex = (type === 'Regular' ? staffDatabase.regular : staffDatabase.joborder).length - 1;
+                selectStaff(staffType, staffIndex);
+            }
+            
+            // Debug: Verify data was saved
+            console.log('Database after save:', staffDatabase);
+        }
+
+        function deleteStaff(type, index) {
+            const staffName = staffDatabase[type][index].name;
+            if (!confirm(`Are you sure you want to delete "${staffName}"? This action cannot be undone.`)) {
+                return;
+            }
+            
+            staffDatabase[type].splice(index, 1);
+            saveDatabase();
+            loadStaffLists();
+            
+            // Clear current staff display if it was deleted
+            if (currentStaff && currentStaff.type === type && currentStaff.index === index) {
+                clearStaffDisplay();
+            }
+            
+            showToast('Staff deleted successfully!');
+        }
+
+        function clearStaffDisplay() {
+            document.getElementById('displayName').textContent = 'Select a staff member';
+            document.getElementById('displayPosition').textContent = '-';
+            
+            updatePhotoDisplay('');
+            updateDocumentStatus({
+                PDS: { content: '', fileName: '', fileType: '' },
+                'Training Certificates': { content: '', fileName: '', fileType: '' },
+                'Other': { content: '', fileName: '', fileType: '' }
+            });
+            
+            currentStaff = null;
+            
+            // Remove active class from all items
+            document.querySelectorAll('.staff-item').forEach(item => {
+                item.classList.remove('active');
+            });
+        }
+
+        function uploadStaffPhoto(e) {
+            if (!currentStaff) {
+                showToast('Please select a staff member first!', 'error');
+                return;
+            }
+            
+            const file = e.target.files[0];
+            if (file) {
+                if (!file.type.startsWith('image/')) {
+                    showToast('Please upload an image file (JPG, PNG, etc.)!', 'error');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Update database
+                    staffDatabase[currentStaff.type][currentStaff.index].photo = e.target.result;
+                    saveDatabase();
+                    
+                    // Update display
+                    updatePhotoDisplay(e.target.result);
+                    
+                    showToast('Profile photo uploaded successfully!');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removePhoto() {
+            if (!currentStaff) {
+                showToast('No staff selected!', 'error');
+                return;
+            }
+            
+            if (!staffDatabase[currentStaff.type][currentStaff.index].photo) {
+                showToast('No photo to remove!', 'error');
+                return;
+            }
+            
+            // Update database
+            staffDatabase[currentStaff.type][currentStaff.index].photo = '';
+            saveDatabase();
+            
+            // Update display
+            updatePhotoDisplay('');
+            
+            showToast('Profile photo removed successfully!');
+        }
+
+        function uploadDocument(docType) {
+            if (!currentStaff) {
+                showToast('Please select a staff member first!', 'error');
+                return;
+            }
+            
+            currentDocumentType = docType;
+            currentFile = null;
+            
+            document.getElementById('docFileUpload').value = '';
+            document.getElementById('fileInfo').innerHTML = `
+                <div style="font-weight: 600; color: #333;">No file selected</div>
+                <div style="font-size: 14px; color: #666;">Select a file to upload</div>
+            `;
+            
+            document.getElementById('docModal').style.display = 'flex';
+        }
+
+        function previewSelectedFile(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            currentFile = file;
+            
+            const fileSize = formatFileSize(file.size);
+            
+            document.getElementById('fileInfo').innerHTML = `
+                <div style="font-weight: 600; color: #333;">${file.name}</div>
+                <div style="font-size: 14px; color: #666;">${fileSize} • ${file.type}</div>
+            `;
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' bytes';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        function closeDocModal() {
+            document.getElementById('docModal').style.display = 'none';
+            currentDocumentType = null;
+            currentFile = null;
+        }
+
+        function uploadSelectedDocument() {
+            if (!currentStaff || !currentDocumentType || !currentFile) {
+                showToast('Please select a file to upload!', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Update database
+                staffDatabase[currentStaff.type][currentStaff.index].documents[currentDocumentType] = {
+                    content: e.target.result,
+                    fileName: currentFile.name,
+                    fileType: currentFile.type
+                };
+                
+                saveDatabase();
+                
+                // Update UI
+                updateDocumentStatus(staffDatabase[currentStaff.type][currentStaff.index].documents);
+                closeDocModal();
+                
+                showToast(`${currentDocumentType} uploaded successfully!`);
+            };
+            
+            reader.readAsDataURL(currentFile);
+        }
+
+        function downloadDocument(docType) {
+            if (!currentStaff) {
+                showToast('Please select a staff member first!', 'error');
+                return;
+            }
+            
+            const doc = staffDatabase[currentStaff.type][currentStaff.index].documents[docType];
+            
+            if (!doc || !doc.content) {
+                showToast(`No ${docType} found to download!`, 'error');
+                return;
+            }
+            
+            // Create download link
+            const blob = new Blob([doc.content], { type: doc.fileType });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = doc.fileName || `${docType}_${currentStaff.name.replace(/\s+/g, '_')}`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            showToast(`${docType} downloaded successfully!`);
+        }
+
+        function manageDocument(docType) {
+            if (!currentStaff) {
+                showToast('Please select a staff member first!', 'error');
+                return;
+            }
+            
+            const doc = staffDatabase[currentStaff.type][currentStaff.index].documents[docType];
+            
+            if (!doc || !doc.content) {
+                showToast(`No ${docType} uploaded yet. Please upload a file first.`, 'error');
+                return;
+            }
+            
+            downloadDocument(docType);
+        }
+
+        function saveDatabase() {
+            localStorage.setItem('staffDatabase', JSON.stringify(staffDatabase));
+        }
+
+        function goToHome() {
+            window.location.href = 'index.html';
+        }
+
+        function goToDatabase() {
+            window.location.href = 'database.html';
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast ' + (type === 'error' ? 'error' : '');
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', initPage);
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const addModal = document.getElementById('addStaffModal');
+            const docModal = document.getElementById('docModal');
+            
+            if (event.target === addModal) {
+                closeModal();
+            }
+            if (event.target === docModal) {
+                closeDocModal();
+            }
+        }
+    </script>
+</body>
+</html>

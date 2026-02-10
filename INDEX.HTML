@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPSAT - Personnel Records</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069');
+            background-size: cover;
+            background-position: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+        
+        .welcome-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .logo {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+        }
+        
+        .logo-text {
+            color: #003366;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        h1 {
+            font-size: 48px;
+            margin: 10px 0;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        h2 {
+            font-size: 36px;
+            margin: 10px 0 30px;
+            color: #4CAF50;
+        }
+        
+        .year {
+            font-size: 120px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.1);
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+        }
+        
+        .buttons-container {
+            display: flex;
+            gap: 40px;
+            margin-top: 50px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .main-btn {
+            padding: 20px 40px;
+            font-size: 20px;
+            background: linear-gradient(45deg, #003366, #0066cc);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 200px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .main-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            background: linear-gradient(45deg, #004488, #0088ff);
+        }
+        
+        .main-btn.faculty {
+            background: linear-gradient(45deg, #2E7D32, #4CAF50);
+        }
+        
+        .main-btn.faculty:hover {
+            background: linear-gradient(45deg, #388E3C, #66BB6A);
+        }
+        
+        .inventory-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background: #FF9800;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .database-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: #9C27B0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <button class="database-btn" onclick="goToDatabase()">DATABASE</button>
+    
+    <div class="welcome-container">
+        <div class="logo">
+            <div class="logo-text">PPSAT</div>
+        </div>
+        
+        <h1>Personnel Records</h1>
+        <h2>Inventory Management System</h2>
+        
+        <div class="year">1995</div>
+        
+        <div class="buttons-container">
+            <button class="main-btn" onclick="goToAdmin()">ADMIN</button>
+            <button class="main-btn faculty" onclick="goToFaculty()">FACULTY</button>
+        </div>
+    </div>
+    
+    <button class="inventory-btn" onclick="goToDatabase()">Inventory Management System</button>
+
+    <script>
+        function goToAdmin() {
+            window.location.href = 'admin.html';
+        }
+        
+        function goToFaculty() {
+            window.location.href = 'faculty.html';
+        }
+        
+        function goToDatabase() {
+            window.location.href = 'database.html';
+        }
+    </script>
+</body>
+</html>

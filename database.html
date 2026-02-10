@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database System - PPSAT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Database System Specific Styles */
+        .db-header {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .db-title {
+            font-size: 36px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .db-subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .db-url {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-family: monospace;
+            font-size: 14px;
+            display: inline-block;
+        }
+        
+        .db-controls {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .controls-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .db-btn {
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #4CAF50, #2E7D32);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .db-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .db-btn.export {
+            background: linear-gradient(45deg, #2196F3, #0D47A1);
+        }
+        
+        .db-btn.export:hover {
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.3);
+        }
+        
+        .db-btn.refresh {
+            background: linear-gradient(45deg, #9C27B0, #6A1B9A);
+        }
+        
+        .db-btn.refresh:hover {
+            box-shadow: 0 5px 15px rgba(156, 39, 176, 0.3);
+        }
+        
+        .search-container {
+            flex: 1;
+            position: relative;
+            min-width: 300px;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 12px 45px 12px 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .search-box:focus {
+            border-color: #4CAF50;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+        
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-card h3 {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .stat-card p {
+            font-size: 36px;
+            font-weight: bold;
+            color: #1a237e;
+            margin: 0;
+        }
+        
+        .db-table-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+        
+        .db-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+        
+        .db-table th {
+            background: linear-gradient(45deg, #1a237e, #283593);
+            color: white;
+            padding: 18px 15px;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        
+        .db-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .db-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .record-photo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #4CAF50;
+        }
+        
+        .no-photo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 12px;
+        }
+        
+        .type-badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        
+        .type-regular {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .type-joborder {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+        
+        .type-faculty {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+        
+        .docs-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            max-width: 250px;
+        }
+        
+        .doc-tag {
+            background: #f0f0f0;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .view-btn {
+            background: #2196F3;
+            color: white;
+        }
+        
+        .view-btn:hover {
+            background: #1976d2;
+        }
+        
+        .delete-btn {
+            background: #f44336;
+            color: white;
+        }
+        
+        .delete-btn:hover {
+            background: #d32f2f;
+        }
+        
+        .download-btn {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .download-btn:hover {
+            background: #388e3c;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            margin: 50px auto;
+            border-radius: 15px;
+            overflow: hidden;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            background: linear-gradient(45deg, #1a237e, #283593);
+            color: white;
+            padding: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .close-modal {
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            transform: rotate(90deg);
+        }
+        
+        .modal-body {
+            padding: 30px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #4CAF50;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .submit-btn {
+            flex: 1;
+            padding: 15px;
+            background: linear-gradient(45deg, #4CAF50, #2E7D32);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .cancel-btn {
+            flex: 1;
+            padding: 15px;
+            background: #f0f0f0;
+            color: #666;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .cancel-btn:hover {
+            background: #e0e0e0;
+        }
+        
+        /* Document Preview Modal */
+        .doc-preview-modal .modal-content {
+            max-width: 800px;
+        }
+        
+        .doc-preview {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .doc-content {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            min-height: 300px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            border: 1px solid #ddd;
+        }
+        
+        .doc-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        /* Password Protection Modal */
+        .password-modal .modal-content {
+            max-width: 400px;
+        }
+        
+        .password-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .password-input:focus {
+            border-color: #4CAF50;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+        
+        .error-message {
+            color: #f44336;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        /* Login Screen */
+        .login-screen {
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.5s ease;
+        }
+        
+        .login-logo {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: #1a237e;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+        }
+        
+        .login-title {
+            color: #1a237e;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+        
+        .login-form {
+            text-align: left;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #1a237e, #283593);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 35, 126, 0.3);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .db-title {
+                font-size: 28px;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .controls-row {
+                flex-direction: column;
+            }
+            
+            .search-container {
+                min-width: 100%;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 20px auto;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .action-buttons {
+                flex-wrap: wrap;
+            }
+            
+            .db-table {
+                min-width: 600px;
+            }
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+            font-weight: 600;
+            animation: slideInRight 0.3s ease;
+        }
+        
+        .toast.show {
+            display: block;
+        }
+        
+        .toast.error {
+            background: #f44336;
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-container">
+            <div class="login-logo" id="loginLogo">PPSAT</div>
+            <h2 class="login-title">Database Access</h2>
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> Enter Database Password</label>
+                    <input type="password" id="password" class="password-input" placeholder="Enter password" required>
+                    <div class="error-message" id="errorMessage">Invalid password. Please try again.</div>
+                </div>
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i> Access Database
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Database Content -->
+    <div class="container" id="mainContent" style="display: none;">
+        <!-- Database Header -->
+        <header class="db-header">
+            <div class="logo-small" id="logoContainer" onclick="document.getElementById('logoInput').click()">
+                <img id="smallLogo" alt="PPSAT Logo">
+                <div id="smallLogoText">PPSAT</div>
+            </div>
+            <input type="file" id="logoInput" accept="image/*" style="display: none;">
+            
+            <h1 class="db-title">
+                <i class="fas fa-database"></i>
+                PPSAT Database System
+            </h1>
+            
+            <p class="db-subtitle">Centralized Personnel Records Management</p>
+            <div class="db-url">secure://database.ppsatsystem.com</div>
+            
+            <div class="header-nav">
+                <button class="nav-btn" onclick="goToHome()">
+                    <i class="fas fa-home"></i> HOME
+                </button>
+                <button class="nav-btn" onclick="goToAdmin()">
+                    <i class="fas fa-users-cog"></i> ADMIN
+                </button>
+                <button class="nav-btn" onclick="goToFaculty()">
+                    <i class="fas fa-chalkboard-teacher"></i> FACULTY
+                </button>
+                <button class="nav-btn" onclick="logout()" style="background: #f44336;">
+                    <i class="fas fa-sign-out-alt"></i> LOCK
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <!-- Database Controls -->
+            <div class="db-controls">
+                <div class="controls-row">
+                    <button class="db-btn refresh" onclick="refreshDatabase()">
+                        <i class="fas fa-sync-alt"></i> Refresh Data
+                    </button>
+                    <button class="db-btn export" onclick="exportToExcel()">
+                        <i class="fas fa-file-export"></i> Export to Excel
+                    </button>
+                    
+                    <div class="search-container">
+                        <input type="text" class="search-box" id="searchInput" 
+                               placeholder="Search by name, position, or type...">
+                        <button class="search-btn" onclick="searchRecords()">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <h3><i class="fas fa-users"></i> Total Records</h3>
+                    <p id="totalRecords">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3><i class="fas fa-user-tie"></i> Regular Staff</h3>
+                    <p id="regularCount">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3><i class="fas fa-briefcase"></i> Job Order</h3>
+                    <p id="jobOrderCount">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3><i class="fas fa-chalkboard-teacher"></i> Faculty</h3>
+                    <p id="facultyCount">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3><i class="fas fa-calendar-alt"></i> Last Synced</h3>
+                    <p id="lastUpdated">-</p>
+                </div>
+            </div>
+
+            <!-- Database Table -->
+            <div class="db-table-container">
+                <table class="db-table" id="databaseTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Photo</th>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Type</th>
+                            <th>Date Added</th>
+                            <th>Documents</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dbTableBody">
+                        <!-- Records will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
+
+        <!-- Document Preview Modal -->
+        <div id="docPreviewModal" class="modal doc-preview-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-file-alt"></i> Document Preview</h3>
+                    <span class="close-modal" onclick="closeDocPreview()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <h4 id="docTitle"></h4>
+                    <div class="doc-preview">
+                        <div class="doc-content" id="docContent">
+                            <!-- Document content will be displayed here -->
+                        </div>
+                        <div class="doc-actions">
+                            <button class="submit-btn" onclick="downloadCurrentDocument()">
+                                <i class="fas fa-download"></i> Download Document
+                            </button>
+                            <button class="cancel-btn" onclick="closeDocPreview()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="toast"></div>
+    </div>
+
+    <script>
+        // Database Password (Default: "admin123" - Change this in production)
+        const DATABASE_PASSWORD = "admin123";
+        let isAuthenticated = false;
+        let combinedDatabase = [];
+        let currentDocument = null;
+
+        // Initialize database
+        function initDatabase() {
+            // Show login screen first
+            showLoginScreen();
+            
+            // Load saved logo
+            const savedLogo = localStorage.getItem('ppsatLogo');
+            if (savedLogo) {
+                const loginLogo = document.getElementById('loginLogo');
+                const smallLogo = document.getElementById('smallLogo');
+                const smallLogoText = document.getElementById('smallLogoText');
+                
+                loginLogo.innerHTML = `<img src="${savedLogo}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+                smallLogo.src = savedLogo;
+                smallLogo.style.display = 'block';
+                smallLogoText.style.display = 'none';
+            }
+            
+            setupEventListeners();
+            
+            // Focus password field
+            setTimeout(() => {
+                document.getElementById('password').focus();
+            }, 100);
+        }
+
+        function showLoginScreen() {
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('mainContent').style.display = 'none';
+        }
+
+        function showDatabaseContent() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+        }
+
+        function login(event) {
+            if (event) event.preventDefault();
+            
+            const passwordInput = document.getElementById('password');
+            const errorMessage = document.getElementById('errorMessage');
+            const password = passwordInput.value;
+            
+            if (password === DATABASE_PASSWORD) {
+                isAuthenticated = true;
+                showDatabaseContent();
+                loadAllData();
+                passwordInput.value = '';
+                errorMessage.style.display = 'none';
+                showToast('Access granted. Welcome to PPSAT Database!');
+            } else {
+                errorMessage.style.display = 'block';
+                passwordInput.focus();
+                passwordInput.select();
+            }
+        }
+
+        function logout() {
+            isAuthenticated = false;
+            showLoginScreen();
+            showToast('Database locked. Please login again to access.');
+        }
+
+        function loadAllData() {
+            combinedDatabase = [];
+            
+            // Load data from Admin page
+            const staffDatabase = JSON.parse(localStorage.getItem('staffDatabase')) || {regular: [], joborder: []};
+            
+            // Add regular staff
+            staffDatabase.regular.forEach(staff => {
+                combinedDatabase.push({
+                    id: staff.id,
+                    name: staff.name,
+                    position: staff.position,
+                    type: 'Regular Staff',
+                    dateAdded: staff.dateAdded || getCurrentDate(),
+                    photo: staff.photo || '',
+                    documents: staff.documents ? Object.keys(staff.documents).filter(doc => 
+                        staff.documents[doc] && staff.documents[doc].content
+                    ) : []
+                });
+            });
+            
+            // Add job order staff
+            staffDatabase.joborder.forEach(staff => {
+                combinedDatabase.push({
+                    id: staff.id,
+                    name: staff.name,
+                    position: staff.position,
+                    type: 'Job Order',
+                    dateAdded: staff.dateAdded || getCurrentDate(),
+                    photo: staff.photo || '',
+                    documents: staff.documents ? Object.keys(staff.documents).filter(doc => 
+                        staff.documents[doc] && staff.documents[doc].content
+                    ) : []
+                });
+            });
+            
+            // Load data from Faculty page
+            const facultyDatabase = JSON.parse(localStorage.getItem('facultyDatabase')) || [];
+            facultyDatabase.forEach(faculty => {
+                combinedDatabase.push({
+                    id: faculty.id,
+                    name: faculty.name,
+                    position: faculty.position,
+                    type: 'Faculty',
+                    dateAdded: faculty.dateAdded || getCurrentDate(),
+                    photo: faculty.photo || '',
+                    documents: faculty.documents ? Object.keys(faculty.documents).filter(doc => 
+                        faculty.documents[doc] && faculty.documents[doc].content
+                    ) : []
+                });
+            });
+            
+            // Load any existing database records (merge avoiding duplicates)
+            const personnelDB = JSON.parse(localStorage.getItem('personnelDB')) || [];
+            personnelDB.forEach(record => {
+                // Check if record already exists with same ID and similar type
+                const exists = combinedDatabase.some(r => 
+                    r.id === record.id && 
+                    r.type && record.type && 
+                    r.type.trim() === record.type.trim()
+                );
+                
+                if (!exists) {
+                    combinedDatabase.push({
+                        id: record.id,
+                        name: record.name || 'Unknown',
+                        position: record.position || 'Not specified',
+                        type: record.type || 'Unknown',
+                        dateAdded: record.dateAdded || getCurrentDate(),
+                        photo: record.photo || '',
+                        documents: record.documents || []
+                    });
+                }
+            });
+            
+            // Sort by ID
+            combinedDatabase.sort((a, b) => a.id - b.id);
+            
+            // Save combined database
+            localStorage.setItem('personnelDB', JSON.stringify(combinedDatabase));
+            
+            loadDatabaseTable();
+            updateStatistics();
+        }
+
+        function getCurrentDate() {
+            const now = new Date();
+            return now.toISOString().split('T')[0];
+        }
+
+        function setupEventListeners() {
+            // Logo upload
+            document.getElementById('logoInput').addEventListener('change', function(e) {
+                handleLogoUpload(e);
+            });
+
+            // Login form submission
+            document.getElementById('loginForm').addEventListener('submit', login);
+            
+            // Search on enter key
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchRecords();
+                }
+            });
+
+            // Live search
+            document.getElementById('searchInput').addEventListener('input', function(e) {
+                if (e.target.value.length > 2 || e.target.value.length === 0) {
+                    searchRecords();
+                }
+            });
+        }
+
+        function handleLogoUpload(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const smallLogo = document.getElementById('smallLogo');
+                    const smallLogoText = document.getElementById('smallLogoText');
+                    const loginLogo = document.getElementById('loginLogo');
+                    
+                    smallLogo.src = e.target.result;
+                    smallLogo.style.display = 'block';
+                    smallLogoText.style.display = 'none';
+                    loginLogo.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+                    
+                    localStorage.setItem('ppsatLogo', e.target.result);
+                    showToast('Logo updated successfully!');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function refreshDatabase() {
+            loadAllData();
+            showToast('Database refreshed with latest data!');
+        }
+
+        function loadDatabaseTable() {
+            const tbody = document.getElementById('dbTableBody');
+            tbody.innerHTML = '';
+            
+            if (combinedDatabase.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 40px;">
+                            <i class="fas fa-database" style="font-size: 48px; color: #ddd; margin-bottom: 20px;"></i>
+                            <h3 style="color: #666;">No records found</h3>
+                            <p>Add records from Admin or Faculty pages</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            combinedDatabase.forEach(record => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${record.id}</td>
+                    <td>
+                        ${record.photo ? 
+                            `<img src="${record.photo}" class="record-photo" alt="${record.name}">` : 
+                            '<div class="no-photo">No Photo</div>'
+                        }
+                    </td>
+                    <td><strong>${record.name}</strong></td>
+                    <td>${record.position}</td>
+                    <td>
+                        <span class="type-badge type-${record.type.toLowerCase().replace(' ', '')}">
+                            ${record.type}
+                        </span>
+                    </td>
+                    <td>${record.dateAdded}</td>
+                    <td>
+                        <div class="docs-list">
+                            ${record.documents && record.documents.length > 0 ? 
+                                record.documents.map(doc => 
+                                    `<span class="doc-tag">${doc}</span>`
+                                ).join('') : 
+                                '<span class="doc-tag" style="background:#f0f0f0;color:#999;">No Docs</span>'
+                            }
+                        </div>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn download-btn" onclick="viewDocuments('${record.id}', '${record.type}')" title="View Documents">
+                                <i class="fas fa-file-alt"></i>
+                            </button>
+                            <button class="action-btn delete-btn" onclick="deleteRecord('${record.id}', '${record.type}')" title="Delete Record">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateStatistics() {
+            const total = combinedDatabase.length;
+            const regular = combinedDatabase.filter(r => r.type === 'Regular Staff' || r.type === 'Regular').length;
+            const jobOrder = combinedDatabase.filter(r => r.type === 'Job Order' || r.type === 'JobOrder').length;
+            const faculty = combinedDatabase.filter(r => r.type === 'Faculty').length;
+            
+            document.getElementById('totalRecords').textContent = total;
+            document.getElementById('regularCount').textContent = regular;
+            document.getElementById('jobOrderCount').textContent = jobOrder;
+            document.getElementById('facultyCount').textContent = faculty;
+            document.getElementById('lastUpdated').textContent = 
+                new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
+
+        function viewDocuments(id, type) {
+            id = parseInt(id);
+            
+            // Find the record in combined database first
+            let record = combinedDatabase.find(r => r.id === id && r.type === type);
+            
+            if (!record) {
+                showToast('Record not found!', 'error');
+                return;
+            }
+            
+            // Show first available document
+            const documents = record.documents || [];
+            if (documents.length > 0) {
+                showDocumentPreview(record, documents[0]);
+            } else {
+                showToast('No documents available for this record.', 'error');
+            }
+        }
+
+        function showDocumentPreview(record, docType) {
+            currentDocument = { record, docType };
+            
+            const docTitle = document.getElementById('docTitle');
+            const docContent = document.getElementById('docContent');
+            
+            docTitle.textContent = `${docType} - ${record.name}`;
+            
+            // Generate document content based on type
+            let content = '';
+            switch(docType) {
+                case 'PDS':
+                    content = `PERSONAL DATA SHEET\n\nName: ${record.name}\nPosition: ${record.position}\nPersonnel Type: ${record.type}\nDate Added: ${record.dateAdded}\n\n--- PERSONAL INFORMATION ---\n\nAddress: [Address Here]\nContact Number: [Contact Number]\nEmail: [Email Address]\nDate of Birth: [Date of Birth]\nCivil Status: [Civil Status]\n\n--- EDUCATIONAL BACKGROUND ---\n\n[Educational Details]\n\n--- WORK EXPERIENCE ---\n\n[Work Experience]\n\n--- END OF DOCUMENT ---`;
+                    break;
+                case 'Training Certificates':
+                    content = `TRAINING CERTIFICATES\n\nName: ${record.name}\nPosition: ${record.position}\n\nCERTIFICATES EARNED:\n\n1. Professional Development Training - ${new Date().getFullYear()}\n2. Safety and Security Seminar - ${new Date().getFullYear() - 1}\n3. Technical Skills Workshop - ${new Date().getFullYear() - 2}\n4. Leadership Training - ${new Date().getFullYear() - 3}\n\nIssuing Authority: PPSAT Training Department\nDate Issued: ${new Date().toLocaleDateString()}\n\n--- CERTIFICATE VALID ---`;
+                    break;
+                case 'TESDA Certificates':
+                    content = `TESDA CERTIFICATES\n\nName: ${record.name}\nPosition: ${record.position}\n\nTESDA NATIONAL CERTIFICATES:\n\n• Trainers Methodology - NC II\n• Computer Systems Servicing - NC II\n• Programming - NC IV\n• Bookkeeping - NC III\n• Housekeeping - NC II\n\nCertificate Numbers: [Certificate Numbers]\nDate Issued: Various Dates\nValid Until: [Validity Dates]\n\nIssued by: TESDA National Capital Region\n\n--- OFFICIAL DOCUMENT ---`;
+                    break;
+                case 'Other':
+                    content = `OTHER DOCUMENTS\n\nName: ${record.name}\nPosition: ${record.position}\n\nDOCUMENTS INCLUDED:\n\n1. Employment Contract\n2. Service Records\n3. Performance Evaluation Forms\n4. Clearance Certificates\n5. Medical Records\n6. Leave Records\n\nDocument Status: Active\nLast Updated: ${new Date().toLocaleDateString()}\n\n--- PPSAT ADMINISTRATION ---`;
+                    break;
+                default:
+                    content = `DOCUMENT: ${docType}\n\nName: ${record.name}\nPosition: ${record.position}\n\nThis is a sample document for the personnel record system.\n\nDocument generated on: ${new Date().toLocaleString()}\n\n--- END OF DOCUMENT ---`;
+            }
+            
+            docContent.textContent = content;
+            document.getElementById('docPreviewModal').style.display = 'block';
+        }
+
+        function closeDocPreview() {
+            document.getElementById('docPreviewModal').style.display = 'none';
+            currentDocument = null;
+        }
+
+        function downloadCurrentDocument() {
+            if (currentDocument) {
+                const { record, docType } = currentDocument;
+                downloadDocument(record, docType);
+            }
+        }
+
+        function downloadDocument(record, docType) {
+            let content = `PPSAT DOCUMENT\n\nName: ${record.name}\nPosition: ${record.position}\nType: ${record.type}\nDocument: ${docType}\nDate: ${new Date().toLocaleDateString()}\n\n--- END OF DOCUMENT ---`;
+            
+            const filename = `${docType.replace(/\s+/g, '_')}_${record.name.replace(/\s+/g, '_')}.txt`;
+            
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            showToast(`${docType} downloaded successfully!`);
+            closeDocPreview();
+        }
+
+        function deleteRecord(id, type) {
+            id = parseInt(id);
+            
+            if (!confirm('Are you sure you want to delete this record? This action cannot be undone.')) {
+                return;
+            }
+            
+            let deleted = false;
+            
+            // Try to delete from all possible databases
+            if (type === 'Faculty') {
+                const facultyDB = JSON.parse(localStorage.getItem('facultyDatabase')) || [];
+                const updatedFacultyDB = facultyDB.filter(r => r.id !== id);
+                if (updatedFacultyDB.length < facultyDB.length) {
+                    localStorage.setItem('facultyDatabase', JSON.stringify(updatedFacultyDB));
+                    deleted = true;
+                }
+            }
+            
+            if (type === 'Regular Staff') {
+                const staffDB = JSON.parse(localStorage.getItem('staffDatabase')) || {regular: [], joborder: []};
+                const updatedRegular = staffDB.regular.filter(r => r.id !== id);
+                if (updatedRegular.length < staffDB.regular.length) {
+                    staffDB.regular = updatedRegular;
+                    localStorage.setItem('staffDatabase', JSON.stringify(staffDB));
+                    deleted = true;
+                }
+            }
+            
+            if (type === 'Job Order') {
+                const staffDB = JSON.parse(localStorage.getItem('staffDatabase')) || {regular: [], joborder: []};
+                const updatedJobOrder = staffDB.joborder.filter(r => r.id !== id);
+                if (updatedJobOrder.length < staffDB.joborder.length) {
+                    staffDB.joborder = updatedJobOrder;
+                    localStorage.setItem('staffDatabase', JSON.stringify(staffDB));
+                    deleted = true;
+                }
+            }
+            
+            // Always delete from combined database
+            const personnelDB = JSON.parse(localStorage.getItem('personnelDB')) || [];
+            const updatedPersonnelDB = personnelDB.filter(r => !(r.id === id && r.type === type));
+            if (updatedPersonnelDB.length < personnelDB.length) {
+                localStorage.setItem('personnelDB', JSON.stringify(updatedPersonnelDB));
+                deleted = true;
+            }
+            
+            // Also delete from combinedDatabase array
+            combinedDatabase = combinedDatabase.filter(r => !(r.id === id && r.type === type));
+            
+            if (deleted) {
+                loadDatabaseTable();
+                updateStatistics();
+                showToast('Record deleted successfully!');
+            } else {
+                showToast('Record not found!', 'error');
+            }
+        }
+
+        function searchRecords() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            const tbody = document.getElementById('dbTableBody');
+            
+            if (!searchTerm) {
+                loadDatabaseTable();
+                return;
+            }
+            
+            const filtered = combinedDatabase.filter(record => 
+                record.name.toLowerCase().includes(searchTerm) ||
+                (record.position && record.position.toLowerCase().includes(searchTerm)) ||
+                record.type.toLowerCase().includes(searchTerm)
+            );
+            
+            tbody.innerHTML = '';
+            
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 40px;">
+                            <i class="fas fa-search" style="font-size: 48px; color: #ddd; margin-bottom: 20px;"></i>
+                            <h3 style="color: #666;">No records found</h3>
+                            <p>Try a different search term</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            filtered.forEach(record => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${record.id}</td>
+                    <td>
+                        ${record.photo ? 
+                            `<img src="${record.photo}" class="record-photo" alt="${record.name}">` : 
+                            '<div class="no-photo">No Photo</div>'
+                        }
+                    </td>
+                    <td><strong>${record.name}</strong></td>
+                    <td>${record.position}</td>
+                    <td>
+                        <span class="type-badge type-${record.type.toLowerCase().replace(' ', '')}">
+                            ${record.type}
+                        </span>
+                    </td>
+                    <td>${record.dateAdded}</td>
+                    <td>
+                        <div class="docs-list">
+                            ${record.documents && record.documents.length > 0 ? 
+                                record.documents.map(doc => 
+                                    `<span class="doc-tag">${doc}</span>`
+                                ).join('') : 
+                                '<span class="doc-tag" style="background:#f0f0f0;color:#999;">No Docs</span>'
+                            }
+                        </div>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn download-btn" onclick="viewDocuments('${record.id}', '${record.type}')">
+                                <i class="fas fa-file-alt"></i>
+                            </button>
+                            <button class="action-btn delete-btn" onclick="deleteRecord('${record.id}', '${record.type}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function exportToExcel() {
+            if (!isAuthenticated) {
+                showToast('Please login first!', 'error');
+                return;
+            }
+            
+            const headers = ['ID', 'Name', 'Position', 'Type', 'Date Added', 'Documents'];
+            const csvData = [
+                headers.join(','),
+                ...combinedDatabase.map(r => [
+                    r.id,
+                    `"${r.name}"`,
+                    `"${r.position}"`,
+                    `"${r.type}"`,
+                    r.dateAdded,
+                    `"${(r.documents || []).join(', ')}"`
+                ].join(','))
+            ].join('\n');
+            
+            const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute("href", url);
+            link.setAttribute("download", `PPSAT_Database_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showToast('Database exported to CSV file!');
+        }
+
+        function goToHome() {
+            window.location.href = 'index.html';
+        }
+
+        function goToAdmin() {
+            window.location.href = 'admin.html';
+        }
+
+        function goToFaculty() {
+            window.location.href = 'faculty.html';
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast ' + (type === 'error' ? 'error' : '');
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const docModal = document.getElementById('docPreviewModal');
+            if (event.target == docModal) {
+                closeDocPreview();
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', initDatabase);
+    </script>
+</body>
+</html>

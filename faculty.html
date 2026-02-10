@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty - PPSAT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a237e, #283593);
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+
+        .faculty-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .faculty-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .logo-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-small {
+            width: 60px;
+            height: 60px;
+            background: white;
+            color: #1a237e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            font-family: 'Arial Black', sans-serif;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-small img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .header-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .database-btn {
+            background: #9C27B0 !important;
+        }
+
+        .database-btn:hover {
+            background: #7B1FA2 !important;
+        }
+
+        /* Faculty Selection Section */
+        .faculty-selection {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .selection-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .selection-title {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .add-faculty-btn {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .add-faculty-btn:hover {
+            background: #388E3C;
+            transform: translateY(-2px);
+        }
+
+        .faculty-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .faculty-item {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 12px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 200px;
+        }
+
+        .faculty-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .faculty-item.active {
+            background: rgba(76, 175, 80, 0.25);
+            border: 2px solid #4CAF50;
+        }
+
+        .faculty-item-photo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .faculty-item-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .faculty-item-info {
+            flex: 1;
+        }
+
+        .faculty-item-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .faculty-item-position {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .faculty-item-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .faculty-action-icon {
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .faculty-action-icon:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Top Home Button */
+        .top-home-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .home-btn-large {
+            padding: 15px 40px;
+            font-size: 20px;
+            background: white;
+            color: #1a237e;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .home-btn-large:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+        }
+
+        /* Personal Information Section */
+        .personnel-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .personnel-content {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        .photo-section {
+            flex: 0 0 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .photo-container {
+            width: 180px;
+            height: 220px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .upload-instruction {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .photo-actions {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .photo-btn {
+            flex: 1;
+            padding: 8px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .photo-btn:hover {
+            background: #1976d2;
+        }
+
+        .remove-photo {
+            background: #f44336;
+        }
+
+        .remove-photo:hover {
+            background: #d32f2f;
+        }
+
+        .info-section {
+            flex: 1;
+        }
+
+        .faculty-name {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .faculty-position {
+            font-size: 20px;
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .documents-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .documents-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .doc-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            text-align: center;
+        }
+
+        .doc-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .doc-card.has-file {
+            background: rgba(76, 175, 80, 0.15);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .doc-icon {
+            font-size: 32px;
+            color: #64b5f6;
+            margin-bottom: 10px;
+        }
+
+        .doc-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .doc-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .doc-action-btn {
+            flex: 1;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .doc-action-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .upload-btn {
+            background: #2196F3;
+        }
+
+        .upload-btn:hover {
+            background: #1976d2;
+        }
+
+        .download-btn {
+            background: #4CAF50;
+        }
+
+        .download-btn:hover {
+            background: #388E3C;
+        }
+
+        /* Bottom Home Button */
+        .bottom-home {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            color: #333;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            color: #1a237e;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-modal {
+            font-size: 28px;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            color: #333;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #2196F3;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .submit-btn:hover {
+            background: #388E3C;
+        }
+
+        .cancel-btn {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .cancel-btn:hover {
+            background: #e0e0e0;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+            font-weight: 600;
+            animation: slideInRight 0.3s ease;
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        .toast.error {
+            background: #f44336;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .personnel-content {
+                flex-direction: column;
+            }
+            
+            .photo-section {
+                width: 100%;
+                align-items: center;
+            }
+            
+            .documents-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .faculty-selection {
+                padding: 15px;
+            }
+            
+            .selection-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .add-faculty-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .documents-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .faculty-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .faculty-list {
+                flex-direction: column;
+            }
+            
+            .faculty-item {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="faculty-container">
+        <!-- Header -->
+        <header class="faculty-header">
+            <div class="logo-title">
+                <div class="logo-small" id="logoContainer" onclick="document.getElementById('logoInput').click()">
+                    <img id="smallLogo" alt="PPSAT Logo">
+                    <div id="smallLogoText">PPSAT</div>
+                </div>
+                <div class="header-title">Faculty</div>
+            </div>
+            
+            <div class="header-nav">
+                <button class="nav-btn" onclick="goToHome()">
+                    <i class="fas fa-home"></i> HOME
+                </button>
+                <button class="nav-btn database-btn" onclick="goToDatabase()">
+                    <i class="fas fa-database"></i> DATABASE
+                </button>
+            </div>
+            
+            <input type="file" id="logoInput" accept="image/*" style="display: none;">
+        </header>
+
+        <!-- Faculty Selection Section -->
+        <div class="faculty-selection">
+            <div class="selection-header">
+                <div class="selection-title">Faculty Members</div>
+                <button class="add-faculty-btn" onclick="openAddFacultyModal()">
+                    <i class="fas fa-plus-circle"></i> Add Faculty
+                </button>
+            </div>
+            <div class="faculty-list" id="facultyList">
+                <!-- Faculty items will be added here -->
+            </div>
+        </div>
+
+        <!-- Top Home Button -->
+        <div class="top-home-section">
+            <button class="home-btn-large" onclick="goToHome()">
+                <i class="fas fa-home"></i> HOME
+            </button>
+        </div>
+
+        <!-- Personal Information Section -->
+        <div class="personnel-section">
+            <div class="personnel-content">
+                <div class="photo-section">
+                    <div class="photo-container" id="photoPreview" onclick="document.getElementById('photoUpload').click()">
+                        <img id="profileImage" src="" alt="Profile Photo">
+                        <div class="upload-instruction">
+                            <i class="fas fa-camera" style="font-size: 32px; margin-bottom: 10px;"></i><br>
+                            Click to upload photo
+                        </div>
+                    </div>
+                    <input type="file" id="photoUpload" accept="image/*" style="display: none;">
+                    <div class="photo-actions">
+                        <button class="photo-btn" onclick="document.getElementById('photoUpload').click()">
+                            <i class="fas fa-upload"></i> Upload
+                        </button>
+                        <button class="photo-btn remove-photo" onclick="removePhoto()">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="info-section">
+                    <div class="faculty-name" id="facultyName">Select a faculty member</div>
+                    <div class="faculty-position" id="facultyPosition">-</div>
+                    
+                    <div class="section-title">Personal Information</div>
+                    
+                    <div class="documents-section">
+                        <div class="documents-grid">
+                            <!-- PDS Card -->
+                            <div class="doc-card" id="pdsCard" onclick="manageDocument('PDS')">
+                                <div class="doc-icon"><i class="fas fa-file-contract"></i></div>
+                                <div class="doc-title">PDS</div>
+                                <div class="doc-actions">
+                                    <button class="doc-action-btn upload-btn" onclick="event.stopPropagation(); uploadDocument('PDS')">
+                                        <i class="fas fa-upload"></i> Upload
+                                    </button>
+                                    <button class="doc-action-btn download-btn" onclick="event.stopPropagation(); downloadDocument('PDS')">
+                                        <i class="fas fa-download"></i> Download
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- TESDA Card -->
+                            <div class="doc-card" id="tesdaCard" onclick="manageDocument('TESDA Certificates')">
+                                <div class="doc-icon"><i class="fas fa-graduation-cap"></i></div>
+                                <div class="doc-title">TESDA Certificates</div>
+                                <div class="doc-actions">
+                                    <button class="doc-action-btn upload-btn" onclick="event.stopPropagation(); uploadDocument('TESDA Certificates')">
+                                        <i class="fas fa-upload"></i> Upload
+                                    </button>
+                                    <button class="doc-action-btn download-btn" onclick="event.stopPropagation(); downloadDocument('TESDA Certificates')">
+                                        <i class="fas fa-download"></i> Download
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Training Certificates Card -->
+                            <div class="doc-card" id="trainingCard" onclick="manageDocument('Training Certificates')">
+                                <div class="doc-icon"><i class="fas fa-certificate"></i></div>
+                                <div class="doc-title">Training Certificates</div>
+                                <div class="doc-actions">
+                                    <button class="doc-action-btn upload-btn" onclick="event.stopPropagation(); uploadDocument('Training Certificates')">
+                                        <i class="fas fa-upload"></i> Upload
+                                    </button>
+                                    <button class="doc-action-btn download-btn" onclick="event.stopPropagation(); downloadDocument('Training Certificates')">
+                                        <i class="fas fa-download"></i> Download
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Other Documents Card -->
+                            <div class="doc-card" id="otherCard" onclick="manageDocument('Other')">
+                                <div class="doc-icon"><i class="fas fa-folder"></i></div>
+                                <div class="doc-title">Other</div>
+                                <div class="doc-actions">
+                                    <button class="doc-action-btn upload-btn" onclick="event.stopPropagation(); uploadDocument('Other')">
+                                        <i class="fas fa-upload"></i> Upload
+                                    </button>
+                                    <button class="doc-action-btn download-btn" onclick="event.stopPropagation(); downloadDocument('Other')">
+                                        <i class="fas fa-download"></i> Download
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bottom-home">
+                <button class="home-btn-large" onclick="goToHome()">
+                    <i class="fas fa-home"></i> HOME
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Faculty Modal -->
+    <div id="addFacultyModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-user-plus"></i> Add New Faculty
+                </div>
+                <span class="close-modal" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="facultyForm">
+                    <div class="form-group">
+                        <label for="facultyNameInput" class="form-label">
+                            <i class="fas fa-user"></i> Full Name
+                        </label>
+                        <input type="text" id="facultyNameInput" class="form-control" placeholder="Enter full name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="facultyPositionInput" class="form-label">
+                            <i class="fas fa-briefcase"></i> Position
+                        </label>
+                        <input type="text" id="facultyPositionInput" class="form-control" placeholder="Enter position" required>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="modal-btn submit-btn" onclick="saveFaculty()">
+                            <i class="fas fa-save"></i> Save Faculty
+                        </button>
+                        <button type="button" class="modal-btn cancel-btn" onclick="closeModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Document Upload Modal -->
+    <div id="docModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-file-upload"></i> Upload Document
+                </div>
+                <span class="close-modal" onclick="closeDocModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="filePreview" style="text-align: center; padding: 20px;">
+                    <i class="fas fa-file-alt" style="font-size: 48px; color: #666; margin-bottom: 15px;"></i>
+                    <div id="fileInfo">
+                        <div style="font-weight: 600; color: #333;">No file selected</div>
+                        <div style="font-size: 14px; color: #666;">Select a file to upload</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="docFileUpload" class="form-label">
+                        <i class="fas fa-folder-open"></i> Select File
+                    </label>
+                    <input type="file" id="docFileUpload" class="form-control" 
+                           accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png,.txt">
+                </div>
+                
+                <div class="form-actions">
+                    <button class="modal-btn submit-btn" onclick="uploadSelectedDocument()" id="uploadBtn">
+                        <i class="fas fa-upload"></i> Upload File
+                    </button>
+                    <button class="modal-btn cancel-btn" onclick="closeDocModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Faculty database
+        let facultyDatabase = JSON.parse(localStorage.getItem('facultyDatabase')) || [
+            {
+                id: 1,
+                name: 'Juan Di Dela Cruz',
+                position: 'Assistant Professor VI',
+                photo: '',
+                documents: {
+                    'PDS': { content: '', fileName: '', fileType: '' },
+                    'TESDA Certificates': { content: '', fileName: '', fileType: '' },
+                    'Training Certificates': { content: '', fileName: '', fileType: '' },
+                    'Other': { content: '', fileName: '', fileType: '' }
+                }
+            },
+            {
+                id: 2,
+                name: 'Maria Santos',
+                position: 'Professor III',
+                photo: '',
+                documents: {
+                    'PDS': { content: '', fileName: '', fileType: '' },
+                    'TESDA Certificates': { content: '', fileName: '', fileType: '' },
+                    'Training Certificates': { content: '', fileName: '', fileType: '' },
+                    'Other': { content: '', fileName: '', fileType: '' }
+                }
+            }
+        ];
+
+        let currentFaculty = null;
+        let currentDocumentType = null;
+        let currentFile = null;
+
+        // Initialize the page
+        function initPage() {
+            loadSavedLogo();
+            loadFacultyList();
+            setupEventListeners();
+            
+            // Auto-select first faculty if available
+            if (facultyDatabase.length > 0) {
+                selectFaculty(0);
+            } else {
+                clearFacultyDisplay();
+            }
+        }
+
+        function loadSavedLogo() {
+            const savedLogo = localStorage.getItem('ppsatLogo');
+            if (savedLogo) {
+                const smallLogo = document.getElementById('smallLogo');
+                const smallLogoText = document.getElementById('smallLogoText');
+                
+                smallLogo.src = savedLogo;
+                smallLogo.style.display = 'block';
+                smallLogoText.style.display = 'none';
+            }
+        }
+
+        function loadFacultyList() {
+            const facultyList = document.getElementById('facultyList');
+            facultyList.innerHTML = '';
+            
+            if (facultyDatabase.length === 0) {
+                facultyList.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.6); width: 100%;">
+                        <i class="fas fa-users" style="font-size: 24px; margin-bottom: 10px;"></i>
+                        <div>No faculty members added yet</div>
+                    </div>
+                `;
+            } else {
+                facultyDatabase.forEach((faculty, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'faculty-item';
+                    div.dataset.index = index;
+                    div.innerHTML = `
+                        <div class="faculty-item-photo" id="facultyPhoto${index}">
+                            ${faculty.photo ? `<img src="${faculty.photo}" alt="${faculty.name}">` : '<i class="fas fa-user" style="color: rgba(255,255,255,0.5);"></i>'}
+                        </div>
+                        <div class="faculty-item-info">
+                            <div class="faculty-item-name">${faculty.name}</div>
+                            <div class="faculty-item-position">${faculty.position}</div>
+                        </div>
+                        <div class="faculty-item-actions">
+                            <div class="faculty-action-icon" onclick="event.stopPropagation(); editFaculty(${index})">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <div class="faculty-action-icon" onclick="event.stopPropagation(); deleteFaculty(${index})">
+                                <i class="fas fa-trash"></i>
+                            </div>
+                        </div>
+                    `;
+                    div.addEventListener('click', () => selectFaculty(index));
+                    facultyList.appendChild(div);
+                });
+            }
+            
+            // Update photo display for each faculty item
+            facultyDatabase.forEach((faculty, index) => {
+                const photoContainer = document.getElementById(`facultyPhoto${index}`);
+                const img = photoContainer.querySelector('img');
+                if (faculty.photo && img) {
+                    img.src = faculty.photo;
+                    img.style.display = 'block';
+                }
+            });
+        }
+
+        function selectFaculty(index) {
+            // Remove active class from all items
+            document.querySelectorAll('.faculty-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Add active class to selected item
+            const selectedItem = document.querySelector(`.faculty-item[data-index="${index}"]`);
+            if (selectedItem) {
+                selectedItem.classList.add('active');
+            }
+            
+            // Get faculty data
+            const faculty = facultyDatabase[index];
+            currentFaculty = { index, ...faculty };
+            
+            // Update display
+            document.getElementById('facultyName').textContent = faculty.name;
+            document.getElementById('facultyPosition').textContent = faculty.position;
+            
+            // Update photo
+            updatePhotoDisplay(faculty.photo);
+            
+            // Update document status
+            updateDocumentStatus(faculty.documents);
+        }
+
+        function updatePhotoDisplay(photo) {
+            const profileImage = document.getElementById('profileImage');
+            const photoPreview = document.getElementById('photoPreview');
+            
+            if (photo) {
+                profileImage.src = photo;
+                profileImage.style.display = 'block';
+                photoPreview.querySelector('.upload-instruction').style.display = 'none';
+            } else {
+                profileImage.style.display = 'none';
+                photoPreview.querySelector('.upload-instruction').style.display = 'flex';
+            }
+        }
+
+        function updateDocumentStatus(documents) {
+            const docTypes = ['PDS', 'TESDA Certificates', 'Training Certificates', 'Other'];
+            docTypes.forEach(docType => {
+                const card = document.getElementById(`${docType.toLowerCase().replace(' ', '')}Card`);
+                
+                if (documents[docType] && documents[docType].content) {
+                    card.classList.add('has-file');
+                } else {
+                    card.classList.remove('has-file');
+                }
+            });
+        }
+
+        function openAddFacultyModal() {
+            document.getElementById('facultyForm').reset();
+            delete document.getElementById('facultyForm').dataset.editIndex;
+            document.getElementById('addFacultyModal').style.display = 'flex';
+        }
+
+        function editFaculty(index) {
+            const faculty = facultyDatabase[index];
+            
+            document.getElementById('facultyNameInput').value = faculty.name;
+            document.getElementById('facultyPositionInput').value = faculty.position;
+            document.getElementById('facultyForm').dataset.editIndex = index;
+            
+            document.getElementById('addFacultyModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('addFacultyModal').style.display = 'none';
+        }
+
+        function saveFaculty() {
+            const name = document.getElementById('facultyNameInput').value.trim();
+            const position = document.getElementById('facultyPositionInput').value.trim();
+            
+            // Validate inputs
+            if (!name || !position) {
+                showToast('Please fill all required fields!', 'error');
+                return;
+            }
+            
+            const editIndex = document.getElementById('facultyForm').dataset.editIndex;
+            
+            if (editIndex !== undefined) {
+                // Edit existing faculty
+                facultyDatabase[editIndex].name = name;
+                facultyDatabase[editIndex].position = position;
+                showToast('Faculty updated successfully!');
+            } else {
+                // Add new faculty
+                const newFaculty = {
+                    id: facultyDatabase.length + 1,
+                    name: name,
+                    position: position,
+                    photo: '',
+                    documents: {
+                        'PDS': { content: '', fileName: '', fileType: '' },
+                        'TESDA Certificates': { content: '', fileName: '', fileType: '' },
+                        'Training Certificates': { content: '', fileName: '', fileType: '' },
+                        'Other': { content: '', fileName: '', fileType: '' }
+                    }
+                };
+                
+                facultyDatabase.push(newFaculty);
+                showToast('Faculty added successfully!');
+            }
+            
+            // Save to database
+            saveDatabase();
+            loadFacultyList();
+            closeModal();
+            
+            // Auto-select the new/edited faculty
+            const selectedIndex = editIndex !== undefined ? editIndex : facultyDatabase.length - 1;
+            selectFaculty(selectedIndex);
+        }
+
+        function deleteFaculty(index) {
+            const facultyName = facultyDatabase[index].name;
+            if (!confirm(`Are you sure you want to delete "${facultyName}"? This action cannot be undone.`)) {
+                return;
+            }
+            
+            facultyDatabase.splice(index, 1);
+            saveDatabase();
+            loadFacultyList();
+            
+            // Clear current faculty display if it was deleted
+            if (currentFaculty && currentFaculty.index === index) {
+                if (facultyDatabase.length > 0) {
+                    selectFaculty(0);
+                } else {
+                    clearFacultyDisplay();
+                }
+            }
+            
+            showToast('Faculty deleted successfully!');
+        }
+
+        function clearFacultyDisplay() {
+            document.getElementById('facultyName').textContent = 'Select a faculty member';
+            document.getElementById('facultyPosition').textContent = '-';
+            
+            updatePhotoDisplay('');
+            updateDocumentStatus({
+                'PDS': { content: '', fileName: '', fileType: '' },
+                'TESDA Certificates': { content: '', fileName: '', fileType: '' },
+                'Training Certificates': { content: '', fileName: '', fileType: '' },
+                'Other': { content: '', fileName: '', fileType: '' }
+            });
+            
+            currentFaculty = null;
+            
+            // Remove active class from all items
+            document.querySelectorAll('.faculty-item').forEach(item => {
+                item.classList.remove('active');
+            });
+        }
+
+        function uploadFacultyPhoto(e) {
+            if (!currentFaculty) {
+                showToast('Please select a faculty member first!', 'error');
+                return;
+            }
+            
+            const file = e.target.files[0];
+            if (file) {
+                if (!file.type.startsWith('image/')) {
+                    showToast('Please upload an image file (JPG, PNG, etc.)!', 'error');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Update database
+                    facultyDatabase[currentFaculty.index].photo = e.target.result;
+                    saveDatabase();
+                    
+                    // Update display
+                    updatePhotoDisplay(e.target.result);
+                    
+                    // Update the faculty list photo
+                    const photoContainer = document.getElementById(`facultyPhoto${currentFaculty.index}`);
+                    let img = photoContainer.querySelector('img');
+                    if (!img) {
+                        photoContainer.innerHTML = `<img src="${e.target.result}" alt="${currentFaculty.name}">`;
+                    } else {
+                        img.src = e.target.result;
+                        img.style.display = 'block';
+                    }
+                    
+                    showToast('Profile photo uploaded successfully!');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removePhoto() {
+            if (!currentFaculty) {
+                showToast('No faculty selected!', 'error');
+                return;
+            }
+            
+            if (!facultyDatabase[currentFaculty.index].photo) {
+                showToast('No photo to remove!', 'error');
+                return;
+            }
+            
+            // Update database
+            facultyDatabase[currentFaculty.index].photo = '';
+            saveDatabase();
+            
+            // Update display
+            updatePhotoDisplay('');
+            
+            // Update the faculty list photo
+            const photoContainer = document.getElementById(`facultyPhoto${currentFaculty.index}`);
+            photoContainer.innerHTML = '<i class="fas fa-user" style="color: rgba(255,255,255,0.5);"></i>';
+            
+            showToast('Profile photo removed successfully!');
+        }
+
+        function uploadDocument(docType) {
+            if (!currentFaculty) {
+                showToast('Please select a faculty member first!', 'error');
+                return;
+            }
+            
+            currentDocumentType = docType;
+            currentFile = null;
+            
+            document.getElementById('docFileUpload').value = '';
+            document.getElementById('fileInfo').innerHTML = `
+                <div style="font-weight: 600; color: #333;">No file selected</div>
+                <div style="font-size: 14px; color: #666;">Select a file to upload</div>
+            `;
+            
+            document.getElementById('docModal').style.display = 'flex';
+        }
+
+        function previewSelectedFile(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            currentFile = file;
+            
+            const fileSize = formatFileSize(file.size);
+            
+            document.getElementById('fileInfo').innerHTML = `
+                <div style="font-weight: 600; color: #333;">${file.name}</div>
+                <div style="font-size: 14px; color: #666;">${fileSize} • ${file.type}</div>
+            `;
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' bytes';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        function closeDocModal() {
+            document.getElementById('docModal').style.display = 'none';
+            currentDocumentType = null;
+            currentFile = null;
+        }
+
+        function uploadSelectedDocument() {
+            if (!currentFaculty || !currentDocumentType || !currentFile) {
+                showToast('Please select a file to upload!', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Update database
+                facultyDatabase[currentFaculty.index].documents[currentDocumentType] = {
+                    content: e.target.result,
+                    fileName: currentFile.name,
+                    fileType: currentFile.type
+                };
+                
+                saveDatabase();
+                
+                // Update UI
+                updateDocumentStatus(facultyDatabase[currentFaculty.index].documents);
+                closeDocModal();
+                
+                showToast(`${currentDocumentType} uploaded successfully!`);
+            };
+            
+            reader.readAsDataURL(currentFile);
+        }
+
+        function downloadDocument(docType) {
+            if (!currentFaculty) {
+                showToast('Please select a faculty member first!', 'error');
+                return;
+            }
+            
+            const doc = facultyDatabase[currentFaculty.index].documents[docType];
+            
+            if (!doc || !doc.content) {
+                showToast(`No ${docType} found to download!`, 'error');
+                return;
+            }
+            
+            // Create download link
+            const blob = new Blob([doc.content], { type: doc.fileType });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = doc.fileName || `${docType}_${currentFaculty.name.replace(/\s+/g, '_')}`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            showToast(`${docType} downloaded successfully!`);
+        }
+
+        function manageDocument(docType) {
+            if (!currentFaculty) {
+                showToast('Please select a faculty member first!', 'error');
+                return;
+            }
+            
+            const doc = facultyDatabase[currentFaculty.index].documents[docType];
+            
+            if (!doc || !doc.content) {
+                showToast(`No ${docType} uploaded yet. Please upload a file first.`, 'error');
+                return;
+            }
+            
+            downloadDocument(docType);
+        }
+
+        function saveDatabase() {
+            localStorage.setItem('facultyDatabase', JSON.stringify(facultyDatabase));
+        }
+
+        function goToHome() {
+            window.location.href = 'index.html';
+        }
+
+        function goToDatabase() {
+            window.location.href = 'database.html';
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast ' + (type === 'error' ? 'error' : '');
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function setupEventListeners() {
+            // Logo upload
+            document.getElementById('logoInput').addEventListener('change', function(e) {
+                handleLogoUpload(e);
+            });
+
+            // Photo upload
+            document.getElementById('photoUpload').addEventListener('change', function(e) {
+                uploadFacultyPhoto(e);
+            });
+
+            // Document upload
+            document.getElementById('docFileUpload').addEventListener('change', function(e) {
+                previewSelectedFile(e);
+            });
+            
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                    closeDocModal();
+                }
+            });
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', initPage);
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const addModal = document.getElementById('addFacultyModal');
+            const docModal = document.getElementById('docModal');
+            
+            if (event.target === addModal) {
+                closeModal();
+            }
+            if (event.target === docModal) {
+                closeDocModal();
+            }
+        }
+    </script>
+</body>
+</html>
